@@ -16,8 +16,8 @@ dependencies:
     sdk: flutter
   intl: ^0.17.0
   path_provider: ^2.0.14
-  syncfusion_flutter_pdf: ^19.4.47-beta
-  syncfusion_flutter_pdfviewer: ^19.4.47-beta
+  syncfusion_flutter_pdf: ^21.1.0
+  syncfusion_flutter_pdfviewer: ^21.1.0
 
 dev_dependencies:
   bloc_test: ^9.1.1
