@@ -1,12 +1,9 @@
-// ignore_for_file: library_private_types_in_public_api
-
 import 'package:apppdf/bloc/pdf_bloc.dart';
 import 'package:apppdf/bloc/pdf_event.dart';
 import 'package:apppdf/bloc/pdf_state.dart';
 import 'package:apppdf/models/pdf_model.dart';
 import 'package:apppdf/pages/pdf_screen.dart';
 import 'package:apppdf/repositories/pdf_repository.dart';
-import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:syncfusion_flutter_pdfviewer/pdfviewer.dart';
@@ -55,22 +52,17 @@ class _HomePageState extends State<HomePage> {
           }
         },
       ),
-      // floatingActionButton: FloatingActionButton(
-      //   onPressed: _showFileChooser,
-      //   tooltip: 'Open PDF',
-      //   child: const Icon(Icons.file_download),
-      // ),
-      // ElevatedButton(
-      //   onPressed: () async {
-      //     final event = await OpenPdfEvent().selectFile();
-      //     context.read<PdfBloc>().add(event);
-      //   },
-      //   child: Text('Seleccionar archivo'),
-      // ),
-      floatingActionButton: FloatingActionButton(onPressed: () async {
-        final event = await OpenPdfEvent(path: '').selectFile();
-      context.read<PdfBloc>().add(event);
-      },),
+      floatingActionButton: FloatingActionButton(
+        child: const Icon(Icons.add),
+        onPressed: () async {
+          try {
+            final event = await OpenPdfEvent.selectFile();
+            _pdfBloc.add(event);
+          } catch (e) {
+            // User cancelled the file picker
+          }
+        },
+      ),
     );
   }
 
@@ -94,7 +86,6 @@ class _HomePageState extends State<HomePage> {
             builder: (_) => PdfScreen(pdfModel: pdf),
           ),
         );
-
       },
       child: SfPdfViewer.network(
         pdf.path,
@@ -108,16 +99,5 @@ class _HomePageState extends State<HomePage> {
     return const Center(
       child: Text('PDF Saved'),
     );
-  }
-
-  Future<void> _showFileChooser() async {
-    final result = await FilePicker.platform.pickFiles(
-      type: FileType.custom,
-      allowedExtensions: ['pdf'],
-    );
-    if (result != null) {
-      final path = result.files.single.path!;
-      _pdfBloc.add(OpenPdfEvent(path: path));
-    }
   }
 }
