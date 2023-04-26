@@ -5,7 +5,6 @@ import 'package:apppdf/models/pdf_model.dart';
 import 'package:apppdf/repositories/pdf_repository.dart';
 import 'package:bloc/bloc.dart';
 import 'package:file_picker/file_picker.dart';
-import 'package:flutter/widgets.dart';
 import 'package:syncfusion_flutter_pdf/pdf.dart';
 
 class PdfBloc extends Bloc<PdfEvent, PdfState> {
@@ -44,29 +43,12 @@ class PdfBloc extends Bloc<PdfEvent, PdfState> {
       try {
         final bytes = await File(event.path).readAsBytes();
         final pdfModel = PdfModel(
-          name: 'prueba.pdf',
-          path: 'assets/documents/prueba.pdf',
+          name: File(event.path).path.split('/').last, // Asignar el nombre correcto del archivo
+          path: event.path,
           bytes: bytes,
         );
         pdfDocument = await repository.openPdf(event.path);
         yield LoadedPdfState(pdfDocument, pdf: pdfModel);
-      } catch (e) {
-        yield PdfErrorState(errorMessage: e.toString());
-      }
-    } else if (event is EditPdfEvent) {
-      yield LoadingPdfState();
-      try {
-        final pdf = event.pdfDocument;
-        final page = pdf.pages[0];
-        final graphics = page.graphics;
-        final brush = PdfSolidBrush(PdfColor(255, 0, 0));
-        graphics.drawString(
-          'Texto de prueba',
-          PdfStandardFont(PdfFontFamily.helvetica, 30),
-          brush: brush,
-          bounds: Rect.fromLTWH(0, 0, page.size.width, page.size.height),
-        );
-        yield LoadedPdfState(pdf, pdf: null);
       } catch (e) {
         yield PdfErrorState(errorMessage: e.toString());
       }

@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:apppdf/models/pdf_model.dart';
 import 'package:flutter/material.dart';
 import 'package:syncfusion_flutter_pdfviewer/pdfviewer.dart';
@@ -26,8 +28,8 @@ class _PdfScreenState extends State<PdfScreen> {
       appBar: AppBar(
         title: Text(widget.pdfModel.name),
       ),
-      body: SfPdfViewer.network(
-        widget.pdfModel.path,
+      body: SfPdfViewer.file(
+        File(widget.pdfModel.path),
         controller: _pdfViewerController,
       ),
     );
