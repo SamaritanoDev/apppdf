@@ -55,11 +55,11 @@ class _HomePageState extends State<HomePage> {
           }
         },
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: _showFileChooser,
-        tooltip: 'Open PDF',
-        child: const Icon(Icons.file_download),
-      ),
+      // floatingActionButton: FloatingActionButton(
+      //   onPressed: _showFileChooser,
+      //   tooltip: 'Open PDF',
+      //   child: const Icon(Icons.file_download),
+      // ),
       // ElevatedButton(
       //   onPressed: () async {
       //     final event = await OpenPdfEvent().selectFile();
@@ -67,6 +67,10 @@ class _HomePageState extends State<HomePage> {
       //   },
       //   child: Text('Seleccionar archivo'),
       // ),
+      floatingActionButton: FloatingActionButton(onPressed: () async {
+        final event = await OpenPdfEvent(path: '').selectFile();
+      context.read<PdfBloc>().add(event);
+      },),
     );
   }
 

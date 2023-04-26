@@ -1,5 +1,4 @@
 import 'dart:io';
-import 'package:apppdf/bloc/pdf_error_state.dart';
 import 'package:apppdf/bloc/pdf_event.dart';
 import 'package:apppdf/bloc/pdf_state.dart';
 import 'package:apppdf/models/pdf_model.dart';
@@ -64,6 +63,8 @@ class PdfBloc extends Bloc<PdfEvent, PdfState> {
       } catch (e) {
         yield PdfErrorState(errorMessage: e.toString());
       }
+    } else if (event is CancelPdfEvent) {
+      yield CancelledPdfState();
     }
   }
 }

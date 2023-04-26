@@ -29,3 +29,5 @@ class SavePdfEvent extends PdfEvent {
 
   PdfDocument get pdf => pdfDocument;
 }
+
+class CancelPdfEvent extends PdfEvent {}
