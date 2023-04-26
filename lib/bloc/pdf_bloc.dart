@@ -5,6 +5,7 @@ import 'package:apppdf/models/pdf_model.dart';
 import 'package:apppdf/repositories/pdf_repository.dart';
 import 'package:bloc/bloc.dart';
 import 'package:file_picker/file_picker.dart';
+import 'package:flutter/widgets.dart';
 import 'package:syncfusion_flutter_pdf/pdf.dart';
 
 class PdfBloc extends Bloc<PdfEvent, PdfState> {
@@ -53,7 +54,22 @@ class PdfBloc extends Bloc<PdfEvent, PdfState> {
         yield PdfErrorState(errorMessage: e.toString());
       }
     } else if (event is EditPdfEvent) {
-      // Implementar la edición del PDF
+      yield LoadingPdfState();
+      try {
+        final pdf = event.pdfDocument;
+        final page = pdf.pages[0];
+        final graphics = page.graphics;
+        final brush = PdfSolidBrush(PdfColor(255, 0, 0));
+        graphics.drawString(
+          'Texto de prueba',
+          PdfStandardFont(PdfFontFamily.helvetica, 30),
+          brush: brush,
+          bounds: Rect.fromLTWH(0, 0, page.size.width, page.size.height),
+        );
+        yield LoadedPdfState(pdf, pdf: null);
+      } catch (e) {
+        yield PdfErrorState(errorMessage: e.toString());
+      }
     } else if (event is SavePdfEvent) {
       yield LoadingPdfState();
       try {
