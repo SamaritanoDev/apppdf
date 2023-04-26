@@ -1,3 +1,5 @@
+// ignore_for_file: library_private_types_in_public_api
+
 import 'package:apppdf/bloc/pdf_bloc.dart';
 import 'package:apppdf/bloc/pdf_event.dart';
 import 'package:apppdf/bloc/pdf_state.dart';
@@ -13,7 +15,6 @@ class HomePage extends StatefulWidget {
   const HomePage({super.key});
 
   @override
-  // ignore: library_private_types_in_public_api
   _HomePageState createState() => _HomePageState();
 }
 
@@ -59,6 +60,13 @@ class _HomePageState extends State<HomePage> {
         tooltip: 'Open PDF',
         child: const Icon(Icons.file_download),
       ),
+      // ElevatedButton(
+      //   onPressed: () async {
+      //     final event = await OpenPdfEvent().selectFile();
+      //     context.read<PdfBloc>().add(event);
+      //   },
+      //   child: Text('Seleccionar archivo'),
+      // ),
     );
   }
 
@@ -75,22 +83,19 @@ class _HomePageState extends State<HomePage> {
   }
 
   Widget _buildLoaded(PdfModel pdf) {
-    final navigationOption = PdfNavigationOption(
-      jumpToDestination: false,
-    );
-
     return GestureDetector(
       onTap: () {
         Navigator.of(context).push(
-          // ignore: inference_failure_on_instance_creation
-          MaterialPageRoute(
+          MaterialPageRoute<PdfScreen>(
             builder: (_) => PdfScreen(pdfModel: pdf),
           ),
         );
+
       },
       child: SfPdfViewer.network(
         pdf.path,
-        navigationOption: navigationOption,
+        enableDocumentLinkAnnotation: false,
+        canShowScrollHead: false,
       ),
     );
   }
